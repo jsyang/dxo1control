@@ -1,2 +1,2 @@
 # dxo1control
-Toolkit to control your DXO One camera
+Tools to control your DXO One camera.
