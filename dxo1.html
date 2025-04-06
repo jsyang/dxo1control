@@ -1,0 +1,79 @@
+<html>
+<script type="module">
+    import DXOONE from './dxo1.js';
+
+    const $ = q => document.querySelector(q);
+
+    const log = msg => $('#msg').innerHTML = msg;
+    const logJSON = obj => log(JSON.stringify(obj, null, 2));
+
+    const dxo1 = {};
+
+    function updateImageWithDataURL(dataURL) {
+        if (dataURL) $('#liveview').src = dataURL;
+    }
+
+    window.toggleConnection = async () => {
+        const shouldEnableControls = !dxo1.device;
+
+        if (dxo1.device) {
+            await dxo1.device.close();
+            delete dxo1.device;
+        } else {
+            dxo1.device = await DXOONE.open();
+
+            dxo1.settings = await dxo1.device.command.getAllSettings();
+            dxo1.status = await dxo1.device.command.getStatus();
+
+            logJSON({ status: dxo1.status, settings: dxo1.settings });
+        }
+
+        $('#btnConnect').innerHTML = shouldEnableControls ? 'Disconnect' : 'Connect';
+        $('#btnLiveView').disabled = !shouldEnableControls;
+        $('#btnSnap').disabled = !shouldEnableControls;
+    };
+
+    let isLiveViewRunning = false;
+    window.toggleLiveView = () => {
+        if (isLiveViewRunning) {
+            dxo1.device.command.liveView.stop();
+        } else {
+            dxo1.device.command.liveView.start(
+                updateImageWithDataURL
+            );
+        }
+
+        $('#btnLiveView').innerHTML = isLiveViewRunning ? 'Start live view' : 'Stop live view';
+        isLiveViewRunning = !isLiveViewRunning;
+    }
+
+    window.takePhoto = async () => {
+        const res = await dxo1.device.command.takePhoto();
+        log(`Photo taken!`);
+    }
+</script>
+<style>
+    #liveview {
+        max-width: 100%;
+        max-height: 600px;
+        display: block;
+        margin: auto;
+        margin-top: 1em;
+    }
+
+    #msg {
+        white-space: pre-wrap;
+        font-family: monospace;
+    }
+</style>
+
+<body>
+    <h2>DXO One Web Interface</h2>
+    <button onclick="window.toggleConnection()" id="btnConnect">Connect</button>
+    <button onclick="window.toggleLiveView()" id="btnLiveView" disabled>Start live view</button>
+    <button onclick="window.takePhoto()" id="btnSnap" disabled>Take a photo</button>
+    <img id="liveview">
+    <div id="msg"></div>
+</body>
+
+</html>
