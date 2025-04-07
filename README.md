@@ -5,7 +5,7 @@ Tools to control your DXO One camera.
 - `dxo1.js`
     - Programmatic control of your DXO One camera over USB
     - Only tested with microUSB connection!
-    - Live demo at https://dxo1demo.jsyang.ca/usb.html
+    - Live demo at [https://dxo1demo.jsyang.ca/usb.html](https://dxo1demo.jsyang.ca/usb.html)
 
 ## Post-processing
 - `resizeDNG.mjs`
