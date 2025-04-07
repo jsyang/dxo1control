@@ -1,8 +1,9 @@
 /*
-    dxo1.js - Programmatic control of your DXO One camera over USB
+    dxo1usb.js - Programmatic control of your DXO One camera over USB
+    https://github.com/jsyang/dxo1control
     <jsyang@gmail.com>
 */
-import { getU8AFromHexString, compareU8A, mergeU8A, getStringFromU8A, getHexFromU8A, sleep } from './u8a.js';
+import { getU8AFromHexString, compareU8A, mergeU8A, getStringFromU8A, } from './u8a.js';
 
 const PARAMS_DEVICE_REQUEST = { filters: [{ vendorId: 0x2b8f }] };
 
